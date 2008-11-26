@@ -1,7 +1,7 @@
 Code Review Tool
 ================
 
-A tool for conducting code reviews.
+A tool for conducting code reviews, built in Django.
 
 
 Status

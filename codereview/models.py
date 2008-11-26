@@ -19,25 +19,29 @@ REVIEW_ASSIGNMENT_ROLES = (
 # Create your models here.
 class Review( models.Model ):
     title = models.CharField( max_length = 255 )
-    created = models.DateTimeField( )
+    created = models.DateTimeField( auto_now_add = True )
+    modified = models.DateTimeField( auto_now = True )
     review_date = models.DateTimeField() 
     description = models.TextField()
     status = models.CharField( choices = REVIEW_STATUS_CHOICES, max_length = 20 )
-    reviewers = models.ManyToManyField( User, through = 'ReviewAssignment' )
+    participants = models.ManyToManyField( User, through = 'Assignment' )
 
-class ReviewAssignment( models.Model ):
+class Assignment( models.Model ):
     review = models.ForeignKey( Review )
     user = models.ForeignKey( User )
     role = models.CharField( choices = REVIEW_ASSIGNMENT_ROLES, max_length = 10 )
 
-class ReviewFile( models.Model ):
+class File( models.Model ):
     review = models.ForeignKey( Review )
+    created = models.DateTimeField( auto_now_add = True )
     title = models.CharField( max_length = 255 )
     description = models.TextField()
-    file_data = models.TextField()    
+    file_data = models.TextField()
+    mime_type = models.CharField( max_length = 255 )
 
 class Comment( models.Model ):
-    review_file = models.ForeignKey( ReviewFile )
+    review_file = models.ForeignKey( File )
+    created = models.DateTimeField( auto_now_add = True )
     author = models.ForeignKey( User )
     start_index = models.IntegerField()
     end_index = models.IntegerField()
