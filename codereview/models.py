@@ -25,11 +25,19 @@ class Review( models.Model ):
     description = models.TextField()
     status = models.CharField( choices = REVIEW_STATUS_CHOICES, max_length = 20 )
     participants = models.ManyToManyField( User, through = 'Assignment' )
+    
+    def __str__( self ):
+        return self.title
+
 
 class Assignment( models.Model ):
     review = models.ForeignKey( Review )
     user = models.ForeignKey( User )
     role = models.CharField( choices = REVIEW_ASSIGNMENT_ROLES, max_length = 10 )
+    
+    def __str__( self ):
+        return "%s <%s>" % ( user.username, role )
+
 
 class File( models.Model ):
     review = models.ForeignKey( Review )
@@ -38,6 +46,10 @@ class File( models.Model ):
     description = models.TextField()
     file_data = models.TextField()
     mime_type = models.CharField( max_length = 255 )
+    
+    def __str__( self ):
+        return self.title
+
 
 class Comment( models.Model ):
     review_file = models.ForeignKey( File )
@@ -46,3 +58,7 @@ class Comment( models.Model ):
     start_index = models.IntegerField()
     end_index = models.IntegerField()
     content = models.TextField()
+        
+    def __str__( self ):
+        return self.content[:30]
+    
